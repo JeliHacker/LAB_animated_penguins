@@ -1,6 +1,10 @@
 var screen = {width: 600, height: 500}
 var margins = {top: 10, right: 50, bottom: 50, left:50}
 
+var svg = d3.select("svg")
+
+var penguinNoise = document.getElementById("penguinSound")
+
 var selectedShape = prompt("Would you like the data to be displayed in circles or images? Type 'circle' or 'image'", "circle");
 
 if (document.getElementById('circleSelected').checked) {
@@ -85,7 +89,7 @@ var setup = function(array2D)
         })
         .attr("y", function(num)
              {
-            console.log("num", num.grade);
+            
             return yScale(num.grade)
         })
         .attr("cx", function(num, index)
@@ -94,14 +98,34 @@ var setup = function(array2D)
         })
         .attr("cy", function(num)
              {
-            console.log("num", num.grade);
+            //console.log("num", num.grade);
             return yScale(num.grade)
         })
         .attr("r", 13)
+    
         .on("mouseover", function(quiz, index)
             {
-                console.log("grade", quiz.grade)
-                d3.select("body")
+                //console.log("grade", quiz.grade)
+                //console.log("day", quiz.day)
+                
+                
+                svg.selectAll("#info")  
+                    .remove()
+            
+                svg.selectAll("text")                           .data(array2D[0].quizes)
+                    .enter()
+                    .append("text")
+                    .text("Day: " + quiz.day + " " + "Grade: " + quiz.grade)
+                    .attr("style", "font-size: 10px")
+                    .attr("id", "info")
+                    .attr("x", xScale(quiz.day))
+                    .attr("y", function(){
+                    if(quiz.grade < 10){    
+                    return yScale(quiz.grade)
+                    }else{
+                        return yScale(quiz.grade) + 30
+                    }
+                                         })
                     //.text(quiz.day)
             })
         
@@ -122,11 +146,14 @@ var setup = function(array2D)
         .attr("src", function(penguin){
         //console.log("penguin", penguin)
         return "penguins/" + penguin.picture 
-    }) 
+        }) 
     
     
         .on("click", function(penguin, index)
         {
+            svg.selectAll("#info")  
+                    .remove()
+        
             var sound1 = document.getElementById("selectSound");
             sound1.play();
         
@@ -202,6 +229,10 @@ var drawArray = function(array2D, xScale, yScale, index)
 var drawSelectedPenguin = function(penguin){
     d3.select(".selectPenguin")
                 .append("img")
+    .on("click", penguinNoise.play())
                 .attr("src", "penguins/" + penguin.picture)
+                
+                
+    
             
 }
