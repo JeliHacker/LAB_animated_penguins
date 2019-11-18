@@ -114,6 +114,7 @@ var setup = function(array2D)
                 svg.selectAll("#info")  
                     .remove()
             
+                /* // crappy svg version of tooltip
                 svg.selectAll("text")                           .data(array2D[0].quizes)
                     .enter()
                     .append("text")
@@ -121,15 +122,26 @@ var setup = function(array2D)
                     .attr("style", "font-size: 10px")
                     .attr("id", "info")
                     .attr("x", xScale(quiz.day))
-                    .attr("y", function(){
-                    if(quiz.grade < 10){    
-                    return yScale(quiz.grade)
-                    }else{
-                        return yScale(quiz.grade) + 30
-                    }
-                                         })
+                    .attr("y", function()
+                    {
+                        if(quiz.grade < 10){    
+                        return yScale(quiz.grade)
+                        }else{
+                            return yScale(quiz.grade) + 30
+                        }
+                    })
                     //.text(quiz.day)
+                    */
+                console.log("event", d3.event)
+                d3.select("#tooltip")
+                    .style("left", (d3.event.pageX + 20) + "px")
+                    .style("top", (d3.event.pageY + 28) + "px")
+                    .text("Day: " + quiz.day + " " + "Grade: " + quiz.grade)
+                    .classed("hidden", false)
             })
+        .on("mouseout",function(){
+            d3.select("#tooltip").classed("hidden",true)
+        })
         
     
         //an attempt at getting images in the svg
@@ -155,6 +167,8 @@ var setup = function(array2D)
         {
             svg.selectAll("#info")  
                     .remove()
+        
+            d3.select("#tooltip").classed("hidden", true)
         
             var sound1 = document.getElementById("selectSound");
             sound1.play();
