@@ -1,6 +1,11 @@
-var screen = {width: 400, height: 500}
+var screen = {width: 600, height: 500}
 var margins = {top: 10, right: 50, bottom: 50, left:50}
 
+var selectedShape = prompt("Would you like the data to be displayed in circles or images? Type 'circle' or 'image'", "circle");
+
+if (document.getElementById('circleSelected').checked) {
+  selectedShape = document.getElementById('circleSelected').value;
+}
 var penguinPromise = d3.json("penguins/classData.json")
 
 
@@ -21,7 +26,11 @@ penguinPromise.then(
 
 var setup = function(array2D)
 {
-    
+    if (document.getElementById('circleSelected').checked == true) 
+    {
+        selectedShape = "circle"
+    }
+    console.log("selectedshape", selectedShape)
     d3.select("svg")
         .attr("width", screen.width)
         .attr("height", screen.height)
@@ -66,8 +75,19 @@ var setup = function(array2D)
        .enter()
         //.attr("transform", "translate(25)")
     
-        quizzes.append("circle")
+        quizzes.append(selectedShape)
+        .attr("href", "star.jpeg")
+        .attr("height", "12px")
         .attr("fill", "black")
+        .attr("x", function(num, index)
+             {
+            return xScale(index) - 100
+        })
+        .attr("y", function(num)
+             {
+            console.log("num", num.grade);
+            return yScale(num.grade)
+        })
         .attr("cx", function(num, index)
              {
             return xScale(index)
@@ -77,8 +97,20 @@ var setup = function(array2D)
             console.log("num", num.grade);
             return yScale(num.grade)
         })
-        .attr("r", 3)
-
+        .attr("r", 13)
+        .on("mouseover", function(quiz, index)
+            {
+                console.log("grade", quiz.grade)
+                d3.select("body")
+                    //.text(quiz.day)
+            })
+        
+    
+        //an attempt at getting images in the svg
+        /*d3.select("svg").append("image")
+            .attr("href", "star.jpeg")
+            .attr("height", "15px")
+            */
     
     
     
@@ -88,45 +120,44 @@ var setup = function(array2D)
         .enter()
         .append("img")
         .attr("src", function(penguin){
-        console.log("penguin", penguin)
+        //console.log("penguin", penguin)
         return "penguins/" + penguin.picture 
     }) 
     
     
         .on("click", function(penguin, index)
         {
+            var sound1 = document.getElementById("selectSound");
+            sound1.play();
+        
+            if (document.getElementById('circleSelected').checked == true) 
+            {
+        selectedShape = "circle"
+            }
+            console.log("selectedshape", selectedShape)
+        
+        
             d3.selectAll("#graph g")
                 .remove()
-            console.log("click")
-        console.log("index", index)
+        
+        
+            console.log("click", penguin)
+            console.log("index", index)
         
         
             drawArray(array2D, xScale, yScale, index)
              
-            })
-       /* var quizzes = d3.select("#graph")
-        .selectAll("g")
-        .data(array2D[index].quizes)
-        .enter()
-        .append("g")
-        //.attr("transform", "translate(25)")
-    
-        quizzes.append("circle")
-        .attr("fill", "black")
-        .attr("cx", function(num, index)
-             {
-            return xScale(index)
-        })
-        .attr("cy", function(num)
-             {
-            console.log("num", num.grade);
-            return yScale(num.grade)
-        })
-        .attr("r", 3)
-        */
         
-    
-   // drawArray(array2D, xScale, yScale, 0)
+        
+            d3.selectAll(".selectPenguin img")
+                .remove()
+        
+//            d3.select(".selectPenguin")
+//                .append("img")
+//                .attr("src", "penguins/" + penguin.picture)
+        
+            drawSelectedPenguin(penguin)
+          })
      drawArray(array2D, xScale, yScale, 0)
     
 }
@@ -138,12 +169,14 @@ var drawArray = function(array2D, xScale, yScale, index)
 {
     //d3.selectAll("circle")
     //.remove()
+    
+    
     var quizzes = d3.select("#graph")
-        .selectAll("circle")
+        .selectAll(selectedShape)
         .data(array2D[index].quizes)
         //.attr("transform", "translate(25)")
         .transition()
-       
+        .duration(500)
         .attr("fill", "black")
         .attr("cx", function(num, index)
              {
@@ -151,9 +184,24 @@ var drawArray = function(array2D, xScale, yScale, index)
         })
         .attr("cy", function(num)
              {
-            console.log("num", num.grade);
+            //console.log("num", num.grade);
             return yScale(num.grade)
         })
-        .attr("r", 3)
+        .attr("x", function(num, index)
+             {
+            return xScale(index)
+        })
+        .attr("y", function(num)
+             {
+            //console.log("num", num.grade);
+            return yScale(num.grade) - 5 //-5 so that they are centered vertically 
+        })
+        .attr("r", 5)
 }
 
+var drawSelectedPenguin = function(penguin){
+    d3.select(".selectPenguin")
+                .append("img")
+                .attr("src", "penguins/" + penguin.picture)
+            
+}
