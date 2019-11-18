@@ -1,4 +1,4 @@
-var screen = {width: 600, height: 500}
+var screen = {width: 700, height: 500}
 var margins = {top: 10, right: 50, bottom: 50, left:50}
 
 var svg = d3.select("svg")
@@ -82,8 +82,8 @@ var setup = function(array2D)
         //.attr("transform", "translate(25)")
     
         quizzes.append(selectedShape)
-        .attr("href", "star.jpeg")
-        .attr("height", "12px")
+        .attr("href", "dollarsign.jpg")
+        .attr("height", "22px")
         .attr("fill", "black")
         .attr("x", function(num, index)
              {
