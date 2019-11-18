@@ -5,6 +5,8 @@ var svg = d3.select("svg")
 
 var penguinNoise = document.getElementById("penguinSound")
 
+var playPenguinNoise = penguinNoise.play();
+
 var selectedShape = prompt("Would you like the data to be displayed in circles or images? Type 'circle' or 'image'", "circle");
 
 if (document.getElementById('circleSelected').checked) {
@@ -227,12 +229,14 @@ var drawArray = function(array2D, xScale, yScale, index)
 }
 
 var drawSelectedPenguin = function(penguin){
+    
+    
     d3.select(".selectPenguin")
                 .append("img")
-    .on("click", penguinNoise.play())
+                .on("click", function(){
+                penguinNoise.play()
+        })
                 .attr("src", "penguins/" + penguin.picture)
-                
-                
-    
+                 
             
 }
