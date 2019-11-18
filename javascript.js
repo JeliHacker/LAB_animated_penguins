@@ -9,9 +9,9 @@ var playPenguinNoise = penguinNoise.play();
 
 var selectedShape = prompt("Would you like the data to be displayed in circles or images? Type 'circle' or 'image'", "circle");
 
-if (document.getElementById('circleSelected').checked) {
-  selectedShape = document.getElementById('circleSelected').value;
-}
+//if (document.getElementById('circleSelected').checked) {
+//  selectedShape = document.getElementById('circleSelected').value;
+//}
 var penguinPromise = d3.json("penguins/classData.json")
 
 
@@ -32,10 +32,10 @@ penguinPromise.then(
 
 var setup = function(array2D)
 {
-    if (document.getElementById('circleSelected').checked == true) 
-    {
-        selectedShape = "circle"
-    }
+//    if (document.getElementById('circleSelected').checked == true) 
+//    {
+//        selectedShape = "circle"
+//    }
     console.log("selectedshape", selectedShape)
     d3.select("svg")
         .attr("width", screen.width)
@@ -173,10 +173,10 @@ var setup = function(array2D)
             var sound1 = document.getElementById("selectSound");
             sound1.play();
         
-            if (document.getElementById('circleSelected').checked == true) 
-            {
-        selectedShape = "circle"
-            }
+//            if (document.getElementById('circleSelected').checked == true) 
+//            {
+//        selectedShape = "circle"
+//            }
             console.log("selectedshape", selectedShape)
         
         
